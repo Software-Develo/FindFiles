@@ -18,20 +18,22 @@
 #include <stdlib.h>
 using namespace std;
 ofstream file;
+ofstream sortfile;
 
 const string name = "/Users/maratkhisamutdinov/Desktop/program/Pathname";
 const string sort_name = "/Users/maratkhisamutdinov/Desktop/program/SortPathname";
 char start_path[] = "/";
+char space[] = "         ";
 int enter = 0;
-bool sort = false;
+
 struct St
 {
-    long int size;
     string name;
+    long int size;
 };
 vector <St> vect;
 
-void sort_vect()
+void sortVect()
 {
     for(int startindex = 0; startindex < vect.size() - 1; startindex++)
     {
@@ -89,7 +91,7 @@ void get_list(char path[])
             st.name = new_path;
             st.size = sizest;
             vect.emplace_back(st);
-            file << path << "/"<< dp->d_name << "         " << sizest << endl;
+            file << path << "/"<< dp->d_name << space << sizest << endl;
         }
     }
 
@@ -99,12 +101,21 @@ void get_list(char path[])
 
 int main(int argc, const char * argv[]) {
     file.open(name);
-
+    sortfile.open(sort_name);
     if(file.is_open())  get_list(start_path);
-    else  cout << "File " << "isn't open" << endl;
+    else  cout << "File "  << name << " isn't open" << endl;
 
-    //sort_vect();
+    sortVect();
 
+    if(sortfile.is_open()) {
+        for(int i = 0; i < vect.size(); i++)
+        {
+            sortfile << vect[i].name << space << vect[i].size << endl;
+        }
+    }
+    else cout << "File " << sort_name << " isn't open" << endl;
+
+    sortfile.close();
     file.close();
     return 0;
 }
